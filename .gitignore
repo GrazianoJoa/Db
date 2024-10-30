@@ -1,0 +1,30 @@
+# Compiling files
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# Temp files
+*~ 
+*.tmp
+*.temp
+
+# Common folders
+/build/
+/bin/
+/obj/
+Debug/
+Release/
+
+# IDE Config
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
