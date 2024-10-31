@@ -1,28 +1,41 @@
-# Definimos el compilador y las banderas
+# Nombre del compilador
 CC = gcc
-CFLAGS = -Wall -g
 
-# Archivos fuente
-SRCS = main.c utils.c 
-# Archivos objeto
-OBJS = $(SRCS:.c=.o)
-# Nombre del ejecutable
-EXEC = program
+# Opciones de compilación
+CFLAGS = -Wall -Wextra -g
 
-# Regla por defecto
-all: $(EXEC)
+# Directorios
+SRCDIR = src
+OBJDIR = obj
+BINDIR = bin
+
+# Archivos fuente y ejecutable
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
+EXECUTABLE = $(BINDIR)/programa
+
+# Regla principal
+all: $(EXECUTABLE)
 
 # Regla para crear el ejecutable
-$(EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $(EXEC)
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) -o $@ $^
 
-# Regla para compilar los archivos .c en archivos .o
-%.o: %.c functions.h
-	$(CC) $(CFLAGS) -c $<
+# Regla para compilar los archivos objeto
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Regla para limpiar los archivos generados
+# Regla para crear el directorio obj
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+# Regla para crear el directorio bin
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
+# Regla para limpiar archivos generados
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -rf $(OBJDIR) $(BINDIR) $(EXECUTABLE)
 
-# Regla para limpiar objetos y el ejecutable
+# Regla para asegurar que los directorios existen antes de compilar
 .PHONY: all clean
